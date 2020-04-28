@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="700" height="700"></canvas>
+
+    <script>
+  var canvas = document.getElementById('canvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  
+  if(canvas.getContext) {
+    var ctx = canvas.getContext('2d');
+    var w = canvas.width;
+    var h = canvas.height;
+    ctx.strokeStyle = 'rgba(174,194,224,0.5)';
+    ctx.lineWidth = 2;
+    // ctx.lineCap = 'round';
+    
+    
+    var init = [];
+    var maxParts = 1000;
+    for(var a = 0; a < maxParts; a++) {
+      init.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        l: Math.random() * 1,
+        xs: -4 + Math.random() * 4 + 2,
+        ys: Math.random() * 10 + 10
+      })
+    }
+    
+    var particulas = [];
+    for(var b = 0; b < maxParts; b++) {
+      particulas[b] = init[b];
+    }
+    
+    function desenho() {
+      ctx.clearRect(0, 0, w, h);
+      var grandient = ctx.createLinearGradient(0,0,0,700);
+      grandient.addColorStop(0,'#46507F');
+      grandient.addColorStop(1,'#6C7CCB');
+      ctx.fillStyle = grandient;
+      ctx.fillRect(0, 0, 700, 700);
+      montanhas();
+      ctx.beginPath();
+        ctx.arc(120,100,40,Math.PI * 2,false);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+      for(var c = 0; c < particulas.length; c++) {
+        var p = particulas[c];
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(174,194,224,0.5)';
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x + p.l * p.xs, p.y + p.l * p.ys);
+        ctx.stroke();
+      }
+      mover();
+    }
+    
+    function mover() {
+      for(var b = 0; b < particulas.length; b++) {
+        var p = particulas[b];
+        p.x += p.xs;
+        p.y += p.ys;
+        if(p.x > w || p.y > h) {
+        //   p.x = Math.random() * w;
+          p.y = -15;
+        }
+      }
+    }
+    
+    function montanhas(){
+        ctx.strokeStyle = 'black';
+        ctx.beginPath();
+        ctx.fillStyle = '#66796F';
+        ctx.fillRect(0,500,700,200);
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.moveTo(0,500);
+        ctx.quadraticCurveTo(0,400,300,500);
+        ctx.fillStyle= '#64A182';
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.moveTo(250,500);
+        ctx.quadraticCurveTo(250,400,600,500);
+        ctx.fillStyle= '#64A182';
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+    }
+    setInterval(desenho, 30);
+    
+  }
+    </script>
+</body>
+</html>
